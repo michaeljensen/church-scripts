@@ -1,0 +1,9 @@
+# Machine-local agent settings
+.claude/settings.local.json
+
+# Scratch output
+tmp/
+.tmp/
+
+# OS / editor
+.DS_Store
