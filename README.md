@@ -14,7 +14,7 @@ Scripts and small tools that help leaders and clerks of The Church of Jesus Chri
 
 Most scripts here are bookmarklets: a bookmark whose address is JavaScript instead of a web address. Clicking it runs the script on the page you have open.
 
-1. Open the script's `.js` file and copy its entire contents (one long line that starts with `javascript:`).
+1. Open the script's `.js` file and copy the whole file (it starts with `javascript:`). When you paste it, your browser joins the lines into one. That's expected, and the scripts are written for it.
 2. Create a new bookmark in your browser's bookmarks bar.
    - **Chrome / Edge:** open the bookmark manager, then choose **Add new bookmark**.
    - **Firefox:** right-click the bookmarks toolbar, then choose **Add Bookmark**.

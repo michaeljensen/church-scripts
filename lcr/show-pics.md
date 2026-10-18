@@ -49,8 +49,8 @@ The script depends on these LCR details. When it breaks, check them first, using
 
 Tiles that appear with photos stuck on the placeholder usually mean the member-card endpoints or their JSON changed. Check the Network tab.
 
-The file mixes plain and percent-encoded segments from past hand edits. Browsers accept both. See [AGENTS.md](../AGENTS.md#bookmarklets) for how to edit it safely.
+See [AGENTS.md](../AGENTS.md#bookmarklets) for the rules that keep the script working once it's pasted into a bookmark.
 
 ## Changelog
 
-- **1.3**: First version in this repository. Earlier versions weren't kept.
+- **1.3**: First version in this repository; earlier versions weren't kept. Later rewritten as readable, multi-line source with descriptive names. Behavior is unchanged, so bookmarks installed from the original one-line file don't need reinstalling.

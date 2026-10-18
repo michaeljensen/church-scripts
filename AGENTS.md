@@ -23,10 +23,18 @@ Never commit real member data: names, photos, member IDs, report exports, screen
 
 ## Bookmarklets
 
-A bookmarklet `.js` file is the exact text pasted into a bookmark's address field:
+A bookmarklet `.js` file is the exact text pasted into a bookmark's address field: readable, multi-line source that starts with `javascript:` and wraps the code in an IIFE.
 
-- One line, starting with `javascript:`, wrapping the code in an IIFE.
-- A literal `%` starts a URL escape. Write it as `%25`, or build it at runtime (`show-pics.js` uses `var P='%'`).
+Browsers delete the line breaks when it is pasted, and decode `%` escapes before running it, so the code must mean the same once the lines are joined:
+
+- Use `/* */` comments only. A `//` comment would swallow the rest of the script.
+- End every statement with a semicolon. Never rely on automatic semicolon insertion.
+- Indent every line after the first, so no two words run together when the lines are joined.
+- Never type `%`, even in comments. Use `PCT` (`'\x25'`) in strings instead.
+- Never split a string literal across lines.
+
+Behavior:
+
 - Detect the wrong page and say so with `alert()`, then stop. Guard against a second run with a marker element ID (e.g. `#lcr-tile-view`). Undo is a page refresh.
 - Insert page data with `textContent`, never `innerHTML`.
 - Prefer stable hooks (`data-*` attributes, ARIA) over framework internals. Where internals are unavoidable (`show-pics.js` reads React fiber props), keep the stable hook as the first choice and the internals as a fallback.
@@ -34,20 +42,7 @@ A bookmarklet `.js` file is the exact text pasted into a bookmark's address fiel
 
 ### Editing
 
-1. Decode to a readable copy:
-
-   ```sh
-   python3 -I -c 'import sys, urllib.parse; print(urllib.parse.unquote(open(sys.argv[1]).read().strip()))' lcr/show-pics.js \
-     | sed '1s/^javascript://' > .tmp/show-pics.js
-   ```
-
-2. The decoded copy is one long line; run it through a formatter if that helps. Edit it, then test by pasting it into the browser DevTools console on the target page.
-3. Encode it back into the bookmarklet file. Newlines and `//` comments survive because they are percent-encoded:
-
-   ```sh
-   python3 -I -c 'import sys, urllib.parse; print("javascript:" + urllib.parse.quote(open(sys.argv[1]).read().strip(), safe="(){}[];,=+!&|<>?:*/._-"))' .tmp/show-pics.js \
-     > lcr/show-pics.js
-   ```
-
-4. Reinstall the bookmark from the file and click it on the target page.
-5. Bump the version in the script's `.md` and in the [README.md](README.md#scripts) table, and add a changelog line: minor for fixes and small changes, major for changes users must relearn. Update the rest of the `.md` if behavior, messages, or page dependencies changed.
+1. Edit the `.js` file directly.
+2. For quick tests, paste the whole file into the browser DevTools console on the target page. `javascript:` parses as a statement label, so it runs as-is. Chrome asks you to type `allow pasting` the first time. Refresh between runs.
+3. Before committing, reinstall the bookmark from the file and click it. Only this tests the line-joining rules above.
+4. Bump the version in the script's header comment, its `.md`, and the [README.md](README.md#scripts) table, and add a changelog line: minor for fixes and small changes, major for changes users must relearn. Update the rest of the `.md` if behavior, messages, or page dependencies changed.
