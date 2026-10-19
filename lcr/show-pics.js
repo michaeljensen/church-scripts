@@ -1,5 +1,5 @@
 javascript:(function () {
-  /* LCR Photo Tiles v1.3. Docs: lcr/show-pics.md.
+  /* LCR Photo Tiles v1.4. Docs: lcr/show-pics.md.
      Browsers join these lines into one when this is pasted into a bookmark, so use only block
      comments, end every statement with a semicolon, and never type a percent sign (use PCT). */
   var table = document.querySelector('table');
@@ -108,20 +108,16 @@ javascript:(function () {
     return;
   }
 
-  /* Hide the table and put the grid in the nearest ancestor that spans most of the window. */
+  /* Hide the table and put the grid in its container. Lift fixed pixel max-widths from the
+     container and its ancestors so the grid can span the window; else fall back to the body. */
   var tableWrap = table.parentElement;
   tableWrap.style.display = 'none';
-  var viewportWidth = window.innerWidth;
-  var host = tableWrap.parentElement;
-  var node = host;
-  while (node && node !== document.body) {
-    if (node.getBoundingClientRect().width >= viewportWidth * 0.9) {
-      host = node;
-      break;
-    }
-    node = node.parentElement;
+  var host = tableWrap.parentElement || document.body;
+  for (var node = host; node && node !== document.body; node = node.parentElement) {
+    var nodeStyle = getComputedStyle(node);
+    if (/px$/.test(nodeStyle.maxWidth)) node.style.maxWidth = 'none';
   }
-  if (!host || host === document.body) host = document.body;
+  if (host.getBoundingClientRect().width < window.innerWidth * 0.9) host = document.body;
   var grid = document.createElement('div');
   grid.id = 'lcr-tile-view';
   grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:12px;padding:12px;width:100' + PCT + ';box-sizing:border-box;justify-content:flex-start;align-items:flex-start;';

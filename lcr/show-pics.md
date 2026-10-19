@@ -1,6 +1,6 @@
 # Photo Tiles (`show-pics.js`)
 
-**Version 1.3** · see [Changelog](#changelog)
+**Version 1.4** · see [Changelog](#changelog)
 
 A bookmarklet that turns an LCR Custom Report into a grid of photo tiles. It's useful for learning names and faces, for example a bishopric reviewing new move-ins or a presidency preparing for visits.
 
@@ -33,7 +33,7 @@ A member with no photo keeps the gray placeholder.
 1. **Reads the table.** Uses the first `<table>` on the page. Header text is cleaned up: LCR sometimes renders a label twice ("NameName"), and sometimes shows a raw label key with dots and dashes; both are turned into plain words. Cell text skips elements marked `aria-hidden`.
 2. **Finds each member's ID.** Reads the `data-member-card-person-uuid` attribute in the row. If that is missing, it falls back to the member-card button's React props, looking for a UUID-shaped `id`. Rows without an ID are dropped.
 3. **Picks the name and skips photos.** The name column is the first cell in the first row that holds a member-card link or button; its value becomes the tile title. A column headed "Photo" (or with id `lcr-photo-col-added`) is left out.
-4. **Builds the tiles.** Hides the table and adds a `#lcr-tile-view` container to the nearest ancestor that spans at least 90% of the window, so the grid uses the full width.
+4. **Builds the tiles.** Hides the table and adds a `#lcr-tile-view` grid to the table's container. To let the grid span the window, it removes any fixed pixel `max-width` from that container and every ancestor up to `<body>`. If the container is still under 90% of the window width, the grid goes at the end of `<body>` instead. A refresh restores the page's own widths.
 5. **Loads photos lazily.** An `IntersectionObserver` fetches each member's card as the tile nears the screen. It tries `https://mltp-api.churchofjesuschrist.org/api/member/{uuid}/card` first, then `/mlt/api/member-card?uuid={uuid}` on the current site, both with the user's cookies. In the JSON it takes `tokenUrl`, or failing that the first `http(s)` value under a key containing *token*, *photo*, *image*, *avatar*, or *thumb*. It requests the `/LARGE` size unless the URL already names a size or file type, and falls back to the bare URL if that image fails.
 
 The script only sends GET requests to Church servers and writes member data to the page with `textContent`, so report values can't inject markup.
@@ -46,6 +46,7 @@ The script depends on these LCR details. When it breaks, check them first, using
 - member rows carry `data-member-card-person-uuid`, or a `button` whose React fiber props (`__reactFiber…`, up to 6 levels up) include the member UUID as `id`
 - one of the two member-card endpoints above returns JSON containing a photo URL, and accepts the session cookie from the LCR page
 - photo URLs accept a `/SMALL`, `/MEDIUM`, `/LARGE`, or `/ORIGINAL` size suffix
+- the report's width is capped only by pixel `max-width` rules, which the script lifts; a cap set any other way (a percentage, grid columns) sends the grid to the end of the page
 
 Tiles that appear with photos stuck on the placeholder usually mean the member-card endpoints or their JSON changed. Check the Network tab.
 
@@ -53,4 +54,5 @@ See [AGENTS.md](../AGENTS.md#bookmarklets) for the rules that keep the script wo
 
 ## Changelog
 
+- **1.4**: Keeps the tile grid in the report's container and widens it by lifting fixed pixel max-widths, instead of moving the grid to the first ancestor that was already wide. Fix by Claude for Chrome.
 - **1.3**: First version in this repository; earlier versions weren't kept. Later rewritten as readable, multi-line source with descriptive names. Behavior is unchanged, so bookmarks installed from the original one-line file don't need reinstalling.

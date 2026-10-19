@@ -8,7 +8,7 @@ Scripts and small tools that help leaders and clerks of The Church of Jesus Chri
 
 | Script | Version | Runs on | What it does |
 | --- | --- | --- | --- |
-| [Photo Tiles](lcr/show-pics.md) (`lcr/show-pics.js`) | 1.3 | LCR Custom Report page | Replaces the report table with photo tiles: one card per member, with their photo, name, and the report's columns. |
+| [Photo Tiles](lcr/show-pics.md) (`lcr/show-pics.js`) | 1.4 | LCR Custom Report page | Replaces the report table with photo tiles: one card per member, with their photo, name, and the report's columns. |
 
 ## Installing a bookmarklet
 
@@ -19,7 +19,7 @@ Most scripts here are bookmarklets: a bookmark whose address is JavaScript inste
    - **Chrome / Edge:** open the bookmark manager, then choose **Add new bookmark**.
    - **Firefox:** right-click the bookmarks toolbar, then choose **Add Bookmark**.
    - **Safari:** bookmark any page, then right-click it and choose **Edit Address**.
-3. Give it a clear name that includes the version (for example, *LCR Photo Tiles 1.3*), so you can tell later whether yours is current. Paste the script into the URL/address field.
+3. Give it a clear name that includes the version (for example, *LCR Photo Tiles 1.4*), so you can tell later whether yours is current. Paste the script into the URL/address field.
 4. Sign in to the Church site, open the page the script is for, and click the bookmark.
 
 Read a script before you install it. A bookmarklet runs with your signed-in session and can see everything you can see.
